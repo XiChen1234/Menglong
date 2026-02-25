@@ -16,7 +16,6 @@ var animation_state: SpineAnimationState
 func _ready() -> void:
 	# 绑定相关属性
 	spine_sprite.skeleton_data_res = spine_res
-	print(spine_res.get_animations())
 	spine_sprite.preview_skin = preview_skin
 	spine_sprite.preview_animation = preview_anim
 	# 应用动画与皮肤
