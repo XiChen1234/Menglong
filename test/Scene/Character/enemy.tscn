@@ -1,21 +1,29 @@
-[gd_scene load_steps=5 format=3 uid="uid://dn8xtk7rlgrlp"]
+[gd_scene load_steps=6 format=3 uid="uid://dn8xtk7rlgrlp"]
 
 [ext_resource type="PackedScene" uid="uid://xpti54aiyuuh" path="res://Scene/Character/character.tscn" id="1_skcs8"]
 [ext_resource type="Script" uid="uid://cqww1h7nxcixe" path="res://Scene/Character/enemy.gd" id="2_ioyso"]
-[ext_resource type="SpineSkeletonDataResource" uid="uid://m1w8oieiw6os" path="res://Resource/Spine/enemy.tres" id="3_fdced"]
+[ext_resource type="Script" uid="uid://bcfqwxdv3bf63" path="res://Scene/Character/StateMachine/state.gd" id="3_fdced"]
+[ext_resource type="SpineSkeletonDataResource" uid="uid://m1w8oieiw6os" path="res://Resource/Spine/enemy.tres" id="4_j5gbm"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_ioyso"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_fdced"]
 viewport_path = NodePath("SubViewport")
 
 [node name="Enemy" instance=ExtResource("1_skcs8")]
 script = ExtResource("2_ioyso")
 
 [node name="Sprite3D" parent="." index="1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.569154, 0)
-texture = SubResource("ViewportTexture_ioyso")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7.042, 0)
+texture = SubResource("ViewportTexture_fdced")
 
 [node name="SubViewport" parent="." index="2"]
 size = Vector2i(1920, 2160)
 
 [node name="SpineNode2D" parent="SubViewport" index="0"]
-spine_res = ExtResource("3_fdced")
+spine_res = ExtResource("4_j5gbm")
+
+[node name="StateMachine" parent="." index="3"]
+init_state = NodePath("State")
+
+[node name="State" type="Node" parent="StateMachine" index="0"]
+script = ExtResource("3_fdced")
+metadata/_custom_type_script = "uid://bcfqwxdv3bf63"

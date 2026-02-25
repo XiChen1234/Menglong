@@ -6,3 +6,4 @@
 [resource]
 atlas_res = ExtResource("1_pku3v")
 skeleton_file_res = ExtResource("2_2bhsa")
+default_mix = 0.3
