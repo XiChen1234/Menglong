@@ -1,0 +1,14 @@
+[remap]
+
+importer="spine.skel"
+type="SpineSkeletonFileResource"
+uid="uid://dacdotnsij6bt"
+path="res://.godot/imported/player-main.skel-b377d33099090ab7dec5acff8e827800.spskel"
+
+[deps]
+
+source_file="res://Asserts/Player/player-main.skel"
+dest_files=["res://.godot/imported/player-main.skel-b377d33099090ab7dec5acff8e827800.spskel"]
+
+[params]
+
