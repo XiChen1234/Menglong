@@ -1,27 +1,26 @@
-[gd_scene load_steps=8 format=3 uid="uid://xpti54aiyuuh"]
+[gd_scene load_steps=8 format=3 uid="uid://dtbhawbfjoqjq"]
 
-[ext_resource type="PackedScene" uid="uid://c6rt2pcvesc8j" path="res://Scene/Spine/spine_node_2d.tscn" id="1_2qbhs"]
-[ext_resource type="Script" uid="uid://n6qoynjefoao" path="res://Scene/Character/character.gd" id="1_23n3f"]
-[ext_resource type="Script" uid="uid://cnq3s26k2fr64" path="res://Scene/Character/StateMachine/state_machine.gd" id="3_23n3f"]
-[ext_resource type="Script" uid="uid://bahyh5ng5aald" path="res://Scene/Character/animation_component.gd" id="4_hcypm"]
-[ext_resource type="Script" uid="uid://bdl3k1gle3tx7" path="res://Scene/Character/move_component.gd" id="5_xss0k"]
+[ext_resource type="PackedScene" uid="uid://co7cninpw3g85" path="res://Scene/Spine/spine_node_2d.tscn" id="1_2qbhs"]
+[ext_resource type="Script" uid="uid://bcn08xi7wriis" path="res://Scene/Character/character.gd" id="1_hcypm"]
+[ext_resource type="Script" uid="uid://bgylhuiymwybl" path="res://Script/Character/move_component.gd" id="2_aijn6"]
+[ext_resource type="Script" uid="uid://5kb7ij7cis4c" path="res://Script/Character/anim_component.gd" id="3_23n3f"]
+[ext_resource type="Script" uid="uid://m01jme0vunim" path="res://Script/Character/StateMachine/state_machine.gd" id="4_hcypm"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ur5ca"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_ur5ca"]
 radius = 0.001
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_xss0k"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_2qbhs"]
 viewport_path = NodePath("SubViewport")
 
 [node name="Character" type="CharacterBody3D"]
-script = ExtResource("1_23n3f")
+script = ExtResource("1_hcypm")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-shape = SubResource("CapsuleShape3D_ur5ca")
+shape = SubResource("CylinderShape3D_ur5ca")
 
 [node name="Sprite3D" type="Sprite3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4442109, 0)
 alpha_cut = 1
-texture = SubResource("ViewportTexture_xss0k")
+texture = SubResource("ViewportTexture_2qbhs")
 
 [node name="SubViewport" type="SubViewport" parent="."]
 transparent_bg = true
@@ -30,10 +29,10 @@ size = Vector2i(1920, 1080)
 [node name="SpineNode2D" parent="SubViewport" instance=ExtResource("1_2qbhs")]
 
 [node name="StateMachine" type="Node" parent="."]
-script = ExtResource("3_23n3f")
-
-[node name="AnimationComponent" type="Node" parent="."]
 script = ExtResource("4_hcypm")
 
 [node name="MoveComponent" type="Node" parent="."]
-script = ExtResource("5_xss0k")
+script = ExtResource("2_aijn6")
+
+[node name="AnimComponent" type="Node" parent="."]
+script = ExtResource("3_23n3f")

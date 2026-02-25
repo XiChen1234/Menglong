@@ -1,20 +1,21 @@
-[gd_scene load_steps=8 format=3 uid="uid://fda5bb2orhpk"]
+[gd_scene load_steps=8 format=3 uid="uid://cnbp6cul124j0"]
 
-[ext_resource type="PackedScene" uid="uid://xpti54aiyuuh" path="res://Scene/Character/character.tscn" id="1_5trst"]
-[ext_resource type="SpineSkeletonDataResource" uid="uid://dqe3juv1jqdov" path="res://Resource/Spine/player-main.tres" id="2_087al"]
-[ext_resource type="Script" uid="uid://d4gafasus4jj5" path="res://Scene/Character/player.gd" id="2_vmgdj"]
-[ext_resource type="Script" uid="uid://bqr6wqeirfd01" path="res://Scene/Character/run.gd" id="4_0ov3f"]
-[ext_resource type="Script" uid="uid://ckbpg2erxphsp" path="res://Scene/Character/input_controller.gd" id="4_g5did"]
-[ext_resource type="Script" uid="uid://dt433iy71hdwr" path="res://Scene/Character/StateMachine/Player/idle.gd" id="4_mckv8"]
+[ext_resource type="PackedScene" uid="uid://dtbhawbfjoqjq" path="res://Scene/Character/character.tscn" id="1_5trst"]
+[ext_resource type="Script" uid="uid://bll1ubsthjhie" path="res://Scene/Character/player.gd" id="2_0ov3f"]
+[ext_resource type="SpineSkeletonDataResource" uid="uid://bjetm36xytvps" path="res://Resource/player-main.tres" id="2_087al"]
+[ext_resource type="Script" uid="uid://1e01oufwne1g" path="res://Script/Character/StateMachine/Player/idle.gd" id="3_g5did"]
+[ext_resource type="Script" uid="uid://bj8gp3252qjur" path="res://Script/Character/input_controller.gd" id="3_vmgdj"]
+[ext_resource type="Script" uid="uid://dfsaakm37d54h" path="res://Script/Character/StateMachine/Player/run.gd" id="4_g5did"]
 
-[sub_resource type="ViewportTexture" id="ViewportTexture_mckv8"]
+[sub_resource type="ViewportTexture" id="ViewportTexture_087al"]
 viewport_path = NodePath("SubViewport")
 
 [node name="Player" instance=ExtResource("1_5trst")]
-script = ExtResource("2_vmgdj")
+script = ExtResource("2_0ov3f")
 
 [node name="Sprite3D" parent="." index="1"]
-texture = SubResource("ViewportTexture_mckv8")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.445, 0)
+texture = SubResource("ViewportTexture_087al")
 
 [node name="SpineNode2D" parent="SubViewport" index="0"]
 spine_res = ExtResource("2_087al")
@@ -24,12 +25,12 @@ preview_skin = "Goat"
 init_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="StateMachine" index="0"]
-script = ExtResource("4_mckv8")
-metadata/_custom_type_script = "uid://bcfqwxdv3bf63"
+script = ExtResource("3_g5did")
+metadata/_custom_type_script = "uid://fk0n85bvuoc"
 
 [node name="Run" type="Node" parent="StateMachine" index="1"]
-script = ExtResource("4_0ov3f")
-metadata/_custom_type_script = "uid://bcfqwxdv3bf63"
+script = ExtResource("4_g5did")
+metadata/_custom_type_script = "uid://fk0n85bvuoc"
 
 [node name="InputController" type="Node" parent="." index="6"]
-script = ExtResource("4_g5did")
+script = ExtResource("3_vmgdj")

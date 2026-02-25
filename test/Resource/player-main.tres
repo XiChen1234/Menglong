@@ -1,0 +1,9 @@
+[gd_resource type="SpineSkeletonDataResource" load_steps=3 format=3 uid="uid://bjetm36xytvps"]
+
+[ext_resource type="SpineAtlasResource" uid="uid://b8r0318a7gvdw" path="res://Asserts/Player/player-main.atlas" id="1_evl16"]
+[ext_resource type="SpineSkeletonFileResource" uid="uid://dacdotnsij6bt" path="res://Asserts/Player/player-main.skel" id="2_4exvx"]
+
+[resource]
+atlas_res = ExtResource("1_evl16")
+skeleton_file_res = ExtResource("2_4exvx")
+default_mix = 0.3
