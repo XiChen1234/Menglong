@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bydbb03v615je"
-path="res://.godot/imported/allTiles_sheet.png-249fb54abb24c0d5f4de0cbc81e4d8c7.ctex"
+uid="uid://dht2gibk6ywv3"
+path="res://.godot/imported/ForestWormBoss_2.png-caf7782fc502397814759efcb0048f49.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Asserts/TileMap/allTiles_sheet.png"
-dest_files=["res://.godot/imported/allTiles_sheet.png-249fb54abb24c0d5f4de0cbc81e4d8c7.ctex"]
+source_file="res://Asserts/Enemy/ForestWormBoss_2.png"
+dest_files=["res://.godot/imported/ForestWormBoss_2.png-caf7782fc502397814759efcb0048f49.ctex"]
 
 [params]
 

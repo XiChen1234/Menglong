@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6rt2pcvesc8j"]
+
+[ext_resource type="Script" uid="uid://cg2lkjh32m0b0" path="res://Scene/Spine/spine_node_2d.gd" id="1_nlyop"]
+
+[node name="SpineNode2D" type="Node2D"]
+script = ExtResource("1_nlyop")
+
+[node name="SpineSprite" type="SpineSprite" parent="."]

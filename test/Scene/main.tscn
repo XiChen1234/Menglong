@@ -1,8 +1,27 @@
-[gd_scene load_steps=2 format=3 uid="uid://cunyjxaand5rp"]
+[gd_scene load_steps=8 format=3 uid="uid://cunyjxaand5rp"]
 
+[ext_resource type="Script" uid="uid://c0av88dqxa17p" path="res://Scene/main.gd" id="1_2wwxx"]
 [ext_resource type="MeshLibrary" uid="uid://c53m7083rrxag" path="res://Resource/ground_meshlib.tres" id="1_f6udf"]
+[ext_resource type="PackedScene" uid="uid://fda5bb2orhpk" path="res://Scene/Character/player.tscn" id="2_r34rm"]
+[ext_resource type="PackedScene" uid="uid://dn8xtk7rlgrlp" path="res://Scene/Character/enemy.tscn" id="3_2wwxx"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_f6udf"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_sblpm"]
+sky_material = SubResource("ProceduralSkyMaterial_f6udf")
+
+[sub_resource type="Environment" id="Environment_r34rm"]
+background_mode = 2
+sky = SubResource("Sky_sblpm")
+tonemap_mode = 2
 
 [node name="Main" type="Node3D"]
+script = ExtResource("1_2wwxx")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_r34rm")
 
 [node name="GroundMap" type="GridMap" parent="."]
 mesh_library = ExtResource("1_f6udf")
@@ -13,4 +32,10 @@ data = {
 }
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7074122, 5.622729)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 5)
+
+[node name="Player" parent="." instance=ExtResource("2_r34rm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1058309, 0)
+
+[node name="Enemy" parent="." instance=ExtResource("3_2wwxx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.331764, 7.5089626, 0)

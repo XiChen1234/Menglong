@@ -1,0 +1,8 @@
+[gd_resource type="SpineSkeletonDataResource" load_steps=3 format=3 uid="uid://m1w8oieiw6os"]
+
+[ext_resource type="SpineAtlasResource" uid="uid://d238o624ooqrx" path="res://Asserts/Enemy/ForestWormBoss.atlas" id="1_0gifm"]
+[ext_resource type="SpineSkeletonFileResource" uid="uid://dg2lpnwxwdx38" path="res://Asserts/Enemy/ForestWormBoss.skel" id="2_u1uqv"]
+
+[resource]
+atlas_res = ExtResource("1_0gifm")
+skeleton_file_res = ExtResource("2_u1uqv")

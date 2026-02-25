@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4nu1ifoa0ooq"
-path="res://.godot/imported/Bird.png-ab15c8f4af229229e6e0ab4e5546272e.ctex"
+uid="uid://wtwyiwlwtcvs"
+path="res://.godot/imported/ForestWormBoss_3.png-20018259210bffc8d1c59a9f2cbc60fc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Asserts/Bird/Bird.png"
-dest_files=["res://.godot/imported/Bird.png-ab15c8f4af229229e6e0ab4e5546272e.ctex"]
+source_file="res://Asserts/Enemy/ForestWormBoss_3.png"
+dest_files=["res://.godot/imported/ForestWormBoss_3.png-20018259210bffc8d1c59a9f2cbc60fc.ctex"]
 
 [params]
 

@@ -1,0 +1,16 @@
+[remap]
+
+importer="spine.atlas"
+type="SpineAtlasResource"
+uid="uid://d238o624ooqrx"
+path="res://.godot/imported/ForestWormBoss.atlas-c8ab85da152cc12020058e821c0e4ad1.spatlas"
+
+[deps]
+
+source_file="res://Asserts/Enemy/ForestWormBoss.atlas"
+dest_files=["res://.godot/imported/ForestWormBoss.atlas-c8ab85da152cc12020058e821c0e4ad1.spatlas"]
+
+[params]
+
+normal_map_prefix="n"
+specular_map_prefix="s"

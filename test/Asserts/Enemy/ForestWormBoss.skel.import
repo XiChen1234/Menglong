@@ -1,0 +1,14 @@
+[remap]
+
+importer="spine.skel"
+type="SpineSkeletonFileResource"
+uid="uid://dg2lpnwxwdx38"
+path="res://.godot/imported/ForestWormBoss.skel-ce1ea6d548fc166fc9c42bb0580b23bd.spskel"
+
+[deps]
+
+source_file="res://Asserts/Enemy/ForestWormBoss.skel"
+dest_files=["res://.godot/imported/ForestWormBoss.skel-ce1ea6d548fc166fc9c42bb0580b23bd.spskel"]
+
+[params]
+

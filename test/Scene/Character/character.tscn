@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://xpti54aiyuuh"]
+
+[ext_resource type="PackedScene" uid="uid://c6rt2pcvesc8j" path="res://Scene/Spine/spine_node_2d.tscn" id="1_2qbhs"]
+[ext_resource type="Script" uid="uid://n6qoynjefoao" path="res://Scene/Character/character.gd" id="1_23n3f"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ur5ca"]
+radius = 0.001
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_aijn6"]
+viewport_path = NodePath("SubViewport")
+
+[node name="Character" type="CharacterBody3D"]
+script = ExtResource("1_23n3f")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_ur5ca")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4442109, 0)
+alpha_cut = 1
+texture = SubResource("ViewportTexture_aijn6")
+
+[node name="SubViewport" type="SubViewport" parent="."]
+transparent_bg = true
+size = Vector2i(1920, 1080)
+
+[node name="SpineNode2D" parent="SubViewport" instance=ExtResource("1_2qbhs")]
