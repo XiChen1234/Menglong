@@ -4,8 +4,8 @@
 [ext_resource type="Script" uid="uid://bll1ubsthjhie" path="res://Scene/Character/player.gd" id="2_0ov3f"]
 [ext_resource type="SpineSkeletonDataResource" uid="uid://bjetm36xytvps" path="res://Resource/player-main.tres" id="2_087al"]
 [ext_resource type="Script" uid="uid://1e01oufwne1g" path="res://Script/Character/StateMachine/Player/idle.gd" id="3_g5did"]
-[ext_resource type="Script" uid="uid://bj8gp3252qjur" path="res://Script/Character/input_controller.gd" id="3_vmgdj"]
 [ext_resource type="Script" uid="uid://dfsaakm37d54h" path="res://Script/Character/StateMachine/Player/run.gd" id="4_g5did"]
+[ext_resource type="Script" uid="uid://c53xbtw0008cn" path="res://Scene/Character/input_controller.gd" id="6_0ov3f"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_087al"]
 viewport_path = NodePath("SubViewport")
@@ -21,7 +21,10 @@ texture = SubResource("ViewportTexture_087al")
 spine_res = ExtResource("2_087al")
 preview_skin = "Goat"
 
-[node name="StateMachine" parent="." index="3"]
+[node name="ControlComponent" parent="." index="3"]
+script = ExtResource("6_0ov3f")
+
+[node name="StateMachine" parent="." index="4"]
 init_state = NodePath("Idle")
 
 [node name="Idle" type="Node" parent="StateMachine" index="0"]
@@ -31,6 +34,3 @@ metadata/_custom_type_script = "uid://fk0n85bvuoc"
 [node name="Run" type="Node" parent="StateMachine" index="1"]
 script = ExtResource("4_g5did")
 metadata/_custom_type_script = "uid://fk0n85bvuoc"
-
-[node name="InputController" type="Node" parent="." index="6"]
-script = ExtResource("3_vmgdj")

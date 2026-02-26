@@ -49,8 +49,19 @@ func set_skin(skin_name: String) -> void:
 
 ## 播放动画
 func play_animation(anim_name: String, loop: bool = true, track: int = 0):
+	print("Trying play:", anim_name,
+	  " current:", current_animation_name)
 	if current_animation_name == anim_name:
 		return
 	
 	current_animation_name = anim_name
 	anim_state.set_animation(anim_name, loop, track)
+
+
+## 反转动画
+## - targte: 反转后的目标状态
+func reverse_animation(target: bool) -> void:
+	if target:
+		spine_sprite.scale.x = -1
+	else:
+		spine_sprite.scale.x = 1

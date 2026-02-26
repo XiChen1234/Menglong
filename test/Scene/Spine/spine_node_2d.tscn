@@ -1,12 +1,18 @@
-[gd_scene load_steps=2 format=3 uid="uid://co7cninpw3g85"]
+[gd_scene load_steps=3 format=3 uid="uid://co7cninpw3g85"]
 
 [ext_resource type="Script" uid="uid://b803dwrmwg6cg" path="res://Scene/Spine/spine_node_2d.gd" id="1_kssk3"]
+[ext_resource type="SpineSkeletonDataResource" uid="uid://bjetm36xytvps" path="res://Resource/player-main.tres" id="2_ama7o"]
 
 [node name="SpineNode2D" type="Node2D"]
 script = ExtResource("1_kssk3")
 
 [node name="SpineSprite" type="SpineSprite" parent="."]
-position = Vector2(873, 689)
+position = Vector2(822, 481)
+skeleton_data_res = ExtResource("2_ama7o")
+preview_skin = "Goat"
+preview_animation = "idle"
+preview_frame = false
+preview_time = 0.0
 
 [node name="Label" type="Label" parent="."]
 offset_right = 40.0

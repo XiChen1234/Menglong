@@ -14,7 +14,7 @@ from typing import List, Tuple
 class ProjectSummaryGenerator:
     """项目摘要生成器类"""
     
-    def __init__(self, project_root: str = r"c:\Document\Project\menglong\MengLong\test-2",
+    def __init__(self, project_root: str = r"c:\Document\Project\menglong\MengLong\test",
                  scene_dir: str = "Scene",
                  output_file: str = "project_summary.md"):
         """

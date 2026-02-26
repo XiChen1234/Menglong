@@ -14,4 +14,5 @@ func play_base(anim_name: String) -> void:
 ## 反转
 ## - target: 反转的目标状态
 func reverse(target: bool) -> void:
-	sprite_3d.flip_h = target
+	#sprite_3d.flip_h = target
+	spine_node_2d.reverse_animation(target)
