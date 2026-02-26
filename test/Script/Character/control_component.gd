@@ -22,7 +22,7 @@ func get_move_dir() -> Vector2:
 
 
 ## 设置移动方向
-func set_move_input(dir: Vector2) -> void:
+func _set_move_input(dir: Vector2) -> void:
 	_move_input = dir
 
 
