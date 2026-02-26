@@ -1,6 +1,20 @@
 extends CharacterBody3D
 class_name Character
 
+## 八方向枚举
+enum Direction8 {
+	RIGHT, 
+	RIGHT_DOWN,
+	DOWN,
+	LEFT_DOWN,
+	LEFT,
+	LEFT_UP,
+	UP,
+	RIGHT_UP
+}
+
+var facing: Direction8 = Direction8.DOWN
+
 @onready var state_machine: StateMachine = $StateMachine
 @onready var control_component: ControlComponent = $ControlComponent
 @onready var move_component: MoveComponent = $MoveComponent

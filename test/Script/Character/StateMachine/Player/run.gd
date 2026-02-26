@@ -1,34 +1,22 @@
 extends State
 class_name Run
 
-## 八方向枚举
-enum Direction8 {
-	RIGHT, 
-	RIGHT_DOWN,
-	DOWN,
-	LEFT_DOWN,
-	LEFT,
-	LEFT_UP,
-	UP,
-	RIGHT_UP
-}
-
 ## 方向动画名称字典
 const DIRECTION_ANIM_MAP: Dictionary= {
-	Direction8.RIGHT: { name="run-horizontal", flip=true },
-	Direction8.RIGHT_DOWN: { name="run", flip=true },
-	Direction8.DOWN: { name="run-down", flip=false },
-	Direction8.LEFT_DOWN: { name="run", flip=false },
-	Direction8.LEFT: { name="run-horizontal", flip=false },
-	Direction8.LEFT_UP: { name="run-up-diagonal", flip=false },
-	Direction8.UP: { name="run-up", flip=false },
-	Direction8.RIGHT_UP: { name="run-up-diagonal", flip=true },
+	Character.Direction8.RIGHT: { name="run-horizontal", flip=true },
+	Character.Direction8.RIGHT_DOWN: { name="run", flip=true },
+	Character.Direction8.DOWN: { name="run-down", flip=false },
+	Character.Direction8.LEFT_DOWN: { name="run", flip=false },
+	Character.Direction8.LEFT: { name="run-horizontal", flip=false },
+	Character.Direction8.LEFT_UP: { name="run-up-diagonal", flip=false },
+	Character.Direction8.UP: { name="run-up", flip=false },
+	Character.Direction8.RIGHT_UP: { name="run-up-diagonal", flip=true },
 }
 
 ## 玩家想要Run的方向向量
 var _current_dir: Vector2 = Vector2.ZERO
 ## 玩家想要Run的8方向
-var _current_dir8: Direction8 = Direction8.DOWN
+#var _current_dir8: Character.Direction8 = Character.Direction8.DOWN
 
 
 func enter() -> void:
@@ -52,24 +40,24 @@ func physics_update(_delta: float) -> void:
 更新玩家移动方向
 """
 func _update_direction() -> void:
-	var new_dir8: Direction8 = vector_to_dir8(_current_dir)
-	_current_dir8 = new_dir8
+	var new_dir8: Character.Direction8 = vector_to_dir8(_current_dir)
+	character.facing = new_dir8
 	_play_direction_anim(new_dir8)
 
 
 """播放方向动画"""
-func _play_direction_anim(dir8: Direction8) -> void:
+func _play_direction_anim(dir8: Character.Direction8) -> void:
 	var anim_info = DIRECTION_ANIM_MAP[dir8]
 	character.anim_component.play_base(anim_info.name)
 	character.anim_component.reverse(anim_info.flip)
 
 
 ## 向量转8方向
-static func vector_to_dir8(dir: Vector2) -> Direction8:
+static func vector_to_dir8(dir: Vector2) -> Character.Direction8:
 	var angle: float = atan2(dir.y, dir.x)    
 	if angle < 0:
 		angle += 2 * PI
 		
 	# 将角度映射到8方向索引
 	var index: int = int(round(angle / (PI/4))) % 8
-	return index as Direction8
+	return index as Character.Direction8
