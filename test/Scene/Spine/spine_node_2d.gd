@@ -49,8 +49,6 @@ func set_skin(skin_name: String) -> void:
 
 ## 播放动画
 func play_animation(anim_name: String, loop: bool = true, track: int = 0):
-	print("Trying play:", anim_name,
-	  " current:", current_animation_name)
 	if current_animation_name == anim_name:
 		return
 	

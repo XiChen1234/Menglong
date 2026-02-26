@@ -25,16 +25,14 @@ const DIRECTION_ANIM_MAP: Dictionary= {
 	Direction8.RIGHT_UP: { name="run-up-diagonal", flip=true },
 }
 
+## 玩家想要Run的方向向量
+var _current_dir: Vector2 = Vector2.ZERO
+## 玩家想要Run的8方向
 var _current_dir8: Direction8 = Direction8.DOWN
 
 
 func enter() -> void:
-	print("Enter Run")
-	# 强制更新方向并播放动画，确保从Idle状态切换回来时能正确显示Run动画
-	var move_dir: Vector2 = character.control_component.get_move_dir()
-	var new_dir8: Direction8 = vector_to_dir8(move_dir)
-	_current_dir8 = new_dir8
-	_play_direction_anim(new_dir8)
+	_update_direction()
 
 
 func update(_delta: float) -> void:
@@ -43,28 +41,19 @@ func update(_delta: float) -> void:
 
 
 func physics_update(_delta: float) -> void:
-	var move_dir: Vector2 = character.control_component.get_move_dir()
+	_current_dir = character.control_component.get_move_dir()
 	# 动画更新
-	_update_direction(move_dir)
+	_update_direction()
 	# 物理移动
-	character.move_component.move(move_dir, _delta)
-
-
-func exit() -> void:
-	print("Exit Run")
+	character.move_component.set_move_dir(_current_dir)
 
 
 """
 更新玩家移动方向
 """
-func _update_direction(move_dir: Vector2) -> void:
-	
-	var new_dir8: Direction8 = vector_to_dir8(move_dir)
-	if new_dir8 == _current_dir8:
-		return # 方向没变，不重复播放
-	
+func _update_direction() -> void:
+	var new_dir8: Direction8 = vector_to_dir8(_current_dir)
 	_current_dir8 = new_dir8
-	
 	_play_direction_anim(new_dir8)
 
 

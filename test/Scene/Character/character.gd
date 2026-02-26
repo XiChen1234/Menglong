@@ -7,10 +7,6 @@ class_name Character
 @onready var anim_component: AnimComponent = $AnimComponent
 
 
-func _ready() -> void:
-	pass
-
-
 func _process(delta: float) -> void:
 	control_component.control()
 	state_machine.update(delta)
@@ -18,4 +14,4 @@ func _process(delta: float) -> void:
 
 func _physics_process(delta: float) -> void:
 	state_machine.physics_update(delta)
-	move_and_slide()
+	move_component.move(delta)
