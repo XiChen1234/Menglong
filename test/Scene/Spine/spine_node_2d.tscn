@@ -5,6 +5,8 @@
 
 [node name="SpineNode2D" type="Node2D"]
 script = ExtResource("1_kssk3")
+spine_res = ExtResource("2_ama7o")
+preview_skin = "Goat"
 
 [node name="SpineSprite" type="SpineSprite" parent="."]
 position = Vector2(822, 481)
@@ -17,4 +19,4 @@ preview_time = 0.0
 [node name="Label" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
-text = "SpineNode2D: spine_res 未设置"
+text = "<SpineSkeletonDataResource#-9223369726514607944>"

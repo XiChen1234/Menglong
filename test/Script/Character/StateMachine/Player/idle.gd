@@ -15,11 +15,14 @@ const DIRECTION_ANIM_MAP: Dictionary= {
 
 
 func enter() -> void:
-	character.move_component.stop()
+	character.move_component	.stop()
 	var anim_name: String = DIRECTION_ANIM_MAP[character.facing]
 	character.anim_component.play_base(anim_name)
 
 
 func update(_delta: float) -> void:
+	if character.control_component.get_attack_clicked():
+		state_machine.change_state("Attack")
+	
 	if character.control_component.get_is_moving():
 		state_machine.change_state("Run")

@@ -24,6 +24,8 @@ var facing: Direction8 = Direction8.DOWN
 func _process(delta: float) -> void:
 	control_component.control()
 	state_machine.update(delta)
+	# 清除攻击意图，避免一直攻击
+	control_component.clear_attack_clicked()
 
 
 func _physics_process(delta: float) -> void:

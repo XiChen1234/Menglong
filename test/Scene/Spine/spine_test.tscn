@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2gc1yn448sq8"]
+
+[ext_resource type="SpineSkeletonDataResource" uid="uid://bjetm36xytvps" path="res://Resource/player-main.tres" id="1_fhn3t"]
+[ext_resource type="Script" uid="uid://cyuvirqtm0i86" path="res://Scene/Spine/spine_test.gd" id="2_t3y2o"]
+
+[node name="SpineTest" type="Node2D"]
+
+[node name="SpineSprite" type="SpineSprite" parent="."]
+position = Vector2(550, 525)
+skeleton_data_res = ExtResource("1_fhn3t")
+preview_skin = "Weapons/Poison"
+preview_animation = "attack-combo1"
+preview_frame = false
+preview_time = 0.0
+script = ExtResource("2_t3y2o")
