@@ -5,11 +5,13 @@ class_name SpineNode2D
 用于显示Spine的场景组件
 """
 
+signal animation_finished(anim_name: String)
 
 ## 预设属性
 @export var spine_res: SpineSkeletonDataResource
 @export var preview_skin: String = "default"
 @export var preview_anim: String = "idle"
+@export_multiline var description: String = ""
 
 @onready var spine_sprite: SpineSprite = $SpineSprite
 @onready var label: Label = $Label
@@ -34,9 +36,12 @@ func _ready() -> void:
 		spine_sprite.preview_animation = preview_anim
 	
 	skeleton = spine_sprite.get_skeleton()
-	anim_state = spine_sprite.get_animation_state()
 	skeleton.set_skin_by_name(preview_skin)
-	anim_state.set_animation(preview_anim)
+	
+	anim_state = spine_sprite.get_animation_state()
+	#current_animation_name = preview_anim
+	#anim_state.set_animation(preview_anim)
+	
 	var window_size: Vector2 = get_viewport().size
 	spine_sprite.position = Vector2(window_size.x / 2, window_size.y - 300)
 
@@ -63,3 +68,18 @@ func reverse_animation(target: bool) -> void:
 		spine_sprite.scale.x = -1
 	else:
 		spine_sprite.scale.x = 1
+
+
+## 触发动画播放结束
+func _on_spine_sprite_animation_completed(
+		_spine_sprite: SpineSprite, 
+		_animation_state: SpineAnimationState, 
+		track_entry: SpineTrackEntry
+		) -> void:
+	# 排除循环动画
+	if track_entry.get_loop():
+		return
+	
+	var anim_name: String = track_entry.get_animation().get_name()
+	print(anim_name)
+	self.emit_signal("animation_finished", anim_name)

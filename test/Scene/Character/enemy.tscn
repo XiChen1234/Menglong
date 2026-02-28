@@ -17,4 +17,4 @@ size = Vector2i(1920, 2160)
 
 [node name="SpineNode2D" parent="SubViewport" index="0"]
 spine_res = ExtResource("2_ioyso")
-preview_skin = "default"
+description = "敌人的Spine播放封装"

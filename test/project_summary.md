@@ -58,8 +58,6 @@ var facing: Direction8 = Direction8.DOWN
 func _process(delta: float) -> void:
 	control_component.control()
 	state_machine.update(delta)
-	# 清除攻击意图，避免一直攻击
-	control_component.clear_attack_clicked()
 
 
 func _physics_process(delta: float) -> void:
@@ -100,6 +98,7 @@ transparent_bg = true
 size = Vector2i(1920, 1080)
 
 [node name="SpineNode2D" parent="SubViewport" instance=ExtResource("1_2qbhs")]
+description = ""
 
 [node name="ControlComponent" type="Node" parent="."]
 script = ExtResource("6_n8vba")
@@ -133,7 +132,7 @@ size = Vector2i(1920, 2160)
 
 [node name="SpineNode2D" parent="SubViewport" index="0"]
 spine_res = ExtResource("2_ioyso")
-preview_skin = "default"
+description = "敌人的Spine播放封装"
 
 ============Character/input_controller.gd============
 extends ControlComponent
@@ -144,8 +143,8 @@ func control() -> void:
 	# 移动输入
 	var move_dir: Vector2 = Input.get_vector("left", "right", "up", "down")
 	set_move_input(move_dir)
-	
-	# 攻击输入
+
+	# 攻击输入（只在按下瞬间触发）
 	if Input.is_action_just_pressed("attack"):
 		set_attack_clicked(true)
 
@@ -164,11 +163,11 @@ uid://bll1ubsthjhie
 
 [ext_resource type="PackedScene" uid="uid://dtbhawbfjoqjq" path="res://Scene/Character/character.tscn" id="1_5trst"]
 [ext_resource type="Script" uid="uid://bll1ubsthjhie" path="res://Scene/Character/player.gd" id="2_0ov3f"]
-[ext_resource type="SpineSkeletonDataResource" uid="uid://bjetm36xytvps" path="res://Resource/player-main.tres" id="2_087al"]
+[ext_resource type="SpineSkeletonDataResource" uid="uid://bjetm36xytvps" path="res://Resource/player-main.tres" id="3_2jyx5"]
 [ext_resource type="Script" uid="uid://1e01oufwne1g" path="res://Script/Character/StateMachine/Player/idle.gd" id="3_g5did"]
 [ext_resource type="Script" uid="uid://dfsaakm37d54h" path="res://Script/Character/StateMachine/Player/run.gd" id="4_g5did"]
 [ext_resource type="Script" uid="uid://c53xbtw0008cn" path="res://Scene/Character/input_controller.gd" id="6_0ov3f"]
-[ext_resource type="Script" uid="uid://cnmts5ie38wjd" path="res://Script/Character/StateMachine/Player/attack.gd" id="7_2jyx5"]
+[ext_resource type="Script" uid="uid://gwvgvee8k6jd" path="res://Script/Character/StateMachine/Player/attack.gd" id="6_2jyx5"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_087al"]
 viewport_path = NodePath("SubViewport")
@@ -181,8 +180,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.445, 0)
 texture = SubResource("ViewportTexture_087al")
 
 [node name="SpineNode2D" parent="SubViewport" index="0"]
-spine_res = ExtResource("2_087al")
+spine_res = ExtResource("3_2jyx5")
 preview_skin = "Goat"
+description = "玩家的Spine播放封装"
 
 [node name="ControlComponent" parent="." index="3"]
 script = ExtResource("6_0ov3f")
@@ -199,7 +199,7 @@ script = ExtResource("4_g5did")
 metadata/_custom_type_script = "uid://fk0n85bvuoc"
 
 [node name="Attack" type="Node" parent="StateMachine" index="2"]
-script = ExtResource("7_2jyx5")
+script = ExtResource("6_2jyx5")
 metadata/_custom_type_script = "uid://fk0n85bvuoc"
 
 ============Ground/ground.tscn============
@@ -270,11 +270,13 @@ class_name SpineNode2D
 用于显示Spine的场景组件
 """
 
+signal animation_finished(anim_name: String)
 
 ## 预设属性
 @export var spine_res: SpineSkeletonDataResource
 @export var preview_skin: String = "default"
 @export var preview_anim: String = "idle"
+@export_multiline var description: String = ""
 
 @onready var spine_sprite: SpineSprite = $SpineSprite
 @onready var label: Label = $Label
@@ -299,9 +301,12 @@ func _ready() -> void:
 		spine_sprite.preview_animation = preview_anim
 	
 	skeleton = spine_sprite.get_skeleton()
-	anim_state = spine_sprite.get_animation_state()
 	skeleton.set_skin_by_name(preview_skin)
+	
+	anim_state = spine_sprite.get_animation_state()
 	anim_state.set_animation(preview_anim)
+	# 监听信号
+	
 	var window_size: Vector2 = get_viewport().size
 	spine_sprite.position = Vector2(window_size.x / 2, window_size.y - 300)
 
@@ -329,6 +334,16 @@ func reverse_animation(target: bool) -> void:
 	else:
 		spine_sprite.scale.x = 1
 
+
+## 触发动画播放结束
+func _on_spine_sprite_animation_ended(
+		_spine_sprite: SpineSprite, 
+		_animation_state: SpineAnimationState, 
+		track_entry: SpineTrackEntry
+		) -> void:
+	var anim_name: String = track_entry.get_animation().get_name()
+	self.emit_signal("animation_finished", anim_name)
+
 ============Spine/spine_node_2d.gd.uid============
 uid://b803dwrmwg6cg
 
@@ -340,11 +355,10 @@ uid://b803dwrmwg6cg
 
 [node name="SpineNode2D" type="Node2D"]
 script = ExtResource("1_kssk3")
-spine_res = ExtResource("2_ama7o")
-preview_skin = "Goat"
+description = null
 
 [node name="SpineSprite" type="SpineSprite" parent="."]
-position = Vector2(822, 481)
+position = Vector2(1, -298)
 skeleton_data_res = ExtResource("2_ama7o")
 preview_skin = "Goat"
 preview_animation = "idle"
@@ -354,7 +368,9 @@ preview_time = 0.0
 [node name="Label" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
-text = "<SpineSkeletonDataResource#-9223369726514607944>"
+text = "<SpineSkeletonDataResource#-9223369686870044587>"
+
+[connection signal="animation_ended" from="SpineSprite" to="." method="_on_spine_sprite_animation_ended"]
 
 ============Spine/spine_test.gd============
 extends SpineSprite

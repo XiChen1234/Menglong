@@ -9,6 +9,9 @@ class_name ControlComponent
 
 ## 移动输入
 var _move_input: Vector2 = Vector2.ZERO
+## 攻击输入
+var _attack_clicked: bool = false
+
 
 
 ## 输入决策，子类需要继承重写，实现具体的输入决策
@@ -30,5 +33,21 @@ func set_move_input(dir: Vector2) -> void:
 ## 获取移动状态
 func get_is_moving() -> bool:
 	return _move_input.length_squared() > 0.0001
+
+#endregion
+
+#region 攻击部分
+
+## 是否点击攻击
+func get_attack_clicked() -> bool:
+	return _attack_clicked
+
+## 设置攻击点击
+func set_attack_clicked(value: bool) -> void:
+	_attack_clicked = value
+
+## 清除攻击点击（消费意图）
+func clear_attack_clicked() -> void:
+	_attack_clicked = false
 
 #endregion
