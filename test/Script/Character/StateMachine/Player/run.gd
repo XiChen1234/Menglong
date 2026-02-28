@@ -15,8 +15,6 @@ const DIRECTION_ANIM_MAP: Dictionary= {
 
 ## 玩家想要Run的方向向量
 var _current_dir: Vector2 = Vector2.ZERO
-## 玩家想要Run的8方向
-#var _current_dir8: Character.Direction8 = Character.Direction8.DOWN
 
 
 func enter() -> void:
@@ -24,8 +22,14 @@ func enter() -> void:
 
 
 func update(_delta: float) -> void:
+	if character.control_component.get_attack_clicked():
+		character.move_component.stop()
+		state_machine.change_state("Attack")
+		return
+	
 	if not character.control_component.get_is_moving():
 		state_machine.change_state("Idle")
+		return
 
 
 func physics_update(_delta: float) -> void:
