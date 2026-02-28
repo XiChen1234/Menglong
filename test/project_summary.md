@@ -20,9 +20,13 @@ Scene/
 |   +-- spine_node_2d.gd
 |   +-- spine_node_2d.gd.uid
 |   +-- spine_node_2d.tscn
+|   +-- spine_test.gd
+|   +-- spine_test.gd.uid
+|   +-- spine_test.tscn
 +-- main.gd
 +-- main.gd.uid
 +-- main.tscn
++-- test.tscn
 ```
 
 ## File Contents
@@ -31,23 +35,36 @@ Scene/
 extends CharacterBody3D
 class_name Character
 
+## 八方向枚举
+enum Direction8 {
+	RIGHT, 
+	RIGHT_DOWN,
+	DOWN,
+	LEFT_DOWN,
+	LEFT,
+	LEFT_UP,
+	UP,
+	RIGHT_UP
+}
+
+var facing: Direction8 = Direction8.DOWN
+
 @onready var state_machine: StateMachine = $StateMachine
 @onready var control_component: ControlComponent = $ControlComponent
 @onready var move_component: MoveComponent = $MoveComponent
 @onready var anim_component: AnimComponent = $AnimComponent
 
 
-func _ready() -> void:
-	pass
-
-
 func _process(delta: float) -> void:
+	control_component.control()
 	state_machine.update(delta)
+	# 清除攻击意图，避免一直攻击
+	control_component.clear_attack_clicked()
 
 
 func _physics_process(delta: float) -> void:
-	control_component.control()
 	state_machine.physics_update(delta)
+	move_component.move(delta)
 
 ============Character/character.gd.uid============
 uid://bcn08xi7wriis
@@ -124,8 +141,13 @@ class_name InputController
 
 
 func control() -> void:
+	# 移动输入
 	var move_dir: Vector2 = Input.get_vector("left", "right", "up", "down")
-	set_move_dir(move_dir)
+	set_move_input(move_dir)
+	
+	# 攻击输入
+	if Input.is_action_just_pressed("attack"):
+		set_attack_clicked(true)
 
 ============Character/input_controller.gd.uid============
 uid://c53xbtw0008cn
@@ -138,7 +160,7 @@ class_name Player
 uid://bll1ubsthjhie
 
 ============Character/player.tscn============
-[gd_scene load_steps=8 format=3 uid="uid://cnbp6cul124j0"]
+[gd_scene load_steps=9 format=3 uid="uid://cnbp6cul124j0"]
 
 [ext_resource type="PackedScene" uid="uid://dtbhawbfjoqjq" path="res://Scene/Character/character.tscn" id="1_5trst"]
 [ext_resource type="Script" uid="uid://bll1ubsthjhie" path="res://Scene/Character/player.gd" id="2_0ov3f"]
@@ -146,6 +168,7 @@ uid://bll1ubsthjhie
 [ext_resource type="Script" uid="uid://1e01oufwne1g" path="res://Script/Character/StateMachine/Player/idle.gd" id="3_g5did"]
 [ext_resource type="Script" uid="uid://dfsaakm37d54h" path="res://Script/Character/StateMachine/Player/run.gd" id="4_g5did"]
 [ext_resource type="Script" uid="uid://c53xbtw0008cn" path="res://Scene/Character/input_controller.gd" id="6_0ov3f"]
+[ext_resource type="Script" uid="uid://cnmts5ie38wjd" path="res://Script/Character/StateMachine/Player/attack.gd" id="7_2jyx5"]
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_087al"]
 viewport_path = NodePath("SubViewport")
@@ -173,6 +196,10 @@ metadata/_custom_type_script = "uid://fk0n85bvuoc"
 
 [node name="Run" type="Node" parent="StateMachine" index="1"]
 script = ExtResource("4_g5did")
+metadata/_custom_type_script = "uid://fk0n85bvuoc"
+
+[node name="Attack" type="Node" parent="StateMachine" index="2"]
+script = ExtResource("7_2jyx5")
 metadata/_custom_type_script = "uid://fk0n85bvuoc"
 
 ============Ground/ground.tscn============
@@ -287,7 +314,7 @@ func set_skin(skin_name: String) -> void:
 
 ## 播放动画
 func play_animation(anim_name: String, loop: bool = true, track: int = 0):
-	if current_animation_name == anim_name:
+	if current_animation_name == anim_name and loop:
 		return
 	
 	current_animation_name = anim_name
@@ -313,6 +340,8 @@ uid://b803dwrmwg6cg
 
 [node name="SpineNode2D" type="Node2D"]
 script = ExtResource("1_kssk3")
+spine_res = ExtResource("2_ama7o")
+preview_skin = "Goat"
 
 [node name="SpineSprite" type="SpineSprite" parent="."]
 position = Vector2(822, 481)
@@ -325,7 +354,61 @@ preview_time = 0.0
 [node name="Label" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
-text = "SpineNode2D: spine_res 未设置"
+text = "<SpineSkeletonDataResource#-9223369726514607944>"
+
+============Spine/spine_test.gd============
+extends SpineSprite
+
+func _ready():
+	# 骨骼数据
+	var data = get_skeleton().get_data()
+
+	# 创建一个空皮肤
+	var custom_skin = new_skin("custom-skin")
+
+	# 获取基础皮肤（假设Goat是基础骨骼皮肤）
+	var skin_base = data.find_skin("Lamb")
+	custom_skin.add_skin(skin_base)
+	custom_skin.add_skin(data.find_skin("Weapons/Fervor"))
+
+	# 设置皮肤
+	get_skeleton().set_skin(custom_skin)
+
+	# 打印每个附件的槽位和名称，便于调试
+	for el in custom_skin.get_attachments():
+		var entry: SpineSkinEntry = el
+		print(str(entry.get_slot_index()) + " " + entry.get_name())
+	
+	# 播放动画
+	get_animation_state().set_animation("attack-combo1", false, 0)
+	get_animation_state().add_animation("attack-combo2", false, 0)
+	get_animation_state().add_animation("attack-combo3", false, 0)
+	get_animation_state().add_animation("attack-combo1", false, 0)
+	get_animation_state().add_animation("attack-combo2", false, 0)
+	get_animation_state().add_animation("attack-combo3", false, 0)
+	get_animation_state().add_animation("attack-combo1", false, 0)
+	get_animation_state().add_animation("attack-combo2", false, 0)
+	get_animation_state().add_animation("attack-combo3", false, 0)
+
+============Spine/spine_test.gd.uid============
+uid://cyuvirqtm0i86
+
+============Spine/spine_test.tscn============
+[gd_scene load_steps=3 format=3 uid="uid://d2gc1yn448sq8"]
+
+[ext_resource type="SpineSkeletonDataResource" uid="uid://bjetm36xytvps" path="res://Resource/player-main.tres" id="1_fhn3t"]
+[ext_resource type="Script" uid="uid://cyuvirqtm0i86" path="res://Scene/Spine/spine_test.gd" id="2_t3y2o"]
+
+[node name="SpineTest" type="Node2D"]
+
+[node name="SpineSprite" type="SpineSprite" parent="."]
+position = Vector2(550, 525)
+skeleton_data_res = ExtResource("1_fhn3t")
+preview_skin = "Weapons/Poison"
+preview_animation = "attack-combo1"
+preview_frame = false
+preview_time = 0.0
+script = ExtResource("2_t3y2o")
 
 ============main.gd============
 extends Node3D
@@ -383,3 +466,42 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="Enemy" parent="." instance=ExtResource("4_2wwxx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5213885, 2, 0)
+
+============test.tscn============
+[gd_scene load_steps=7 format=3 uid="uid://dax21svf0dpx3"]
+
+[ext_resource type="Script" uid="uid://d0g4d6b5b1bui" path="res://Scene/main.gd" id="1_vrsyt"]
+[ext_resource type="MeshLibrary" uid="uid://d1bdtffhkjf5t" path="res://Resource/ground_mesh_lib.tres" id="1_wsa5o"]
+[ext_resource type="PackedScene" uid="uid://cnbp6cul124j0" path="res://Scene/Character/player.tscn" id="2_o6ksy"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_o6ksy"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_vrsyt"]
+sky_material = SubResource("ProceduralSkyMaterial_o6ksy")
+
+[sub_resource type="Environment" id="Environment_asc4v"]
+background_mode = 2
+sky = SubResource("Sky_vrsyt")
+tonemap_mode = 2
+
+[node name="Test" type="Node3D"]
+script = ExtResource("1_vrsyt")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_asc4v")
+
+[node name="GridMap" type="GridMap" parent="."]
+mesh_library = ExtResource("1_wsa5o")
+cell_size = Vector3(1, 1, 1)
+cell_center_y = false
+data = {
+"cells": PackedInt32Array(0, 0, 1, 0, 65535, 0, 65535, 65535, 2, 65535, 0, 0, 65534, 0, 0, 65533, 0, 0, 65532, 0, 0, 65532, 1, 0, 65532, 2, 0, 65532, 3, 0, 65533, 3, 0, 65534, 3, 0, 65535, 3, 0, 65535, 2, 0, 65535, 1, 0, 65533, 1, 0, 65533, 2, 0, 65534, 2, 0, 65534, 1, 0, 0, 1, 1, 0, 2, 1, 0, 3, 1, 1, 3, 1, 2, 3, 1, 3, 3, 1, 3, 2, 1, 3, 1, 1, 3, 0, 1, 2, 0, 1, 1, 0, 1, 1, 1, 1, 1, 2, 1, 2, 2, 1, 2, 1, 1, 1, 65535, 0, 2, 65535, 0, 3, 65535, 0, 65534, 65535, 2, 65533, 65535, 2, 65532, 65535, 2, 65532, 65534, 2, 65532, 65533, 2, 65532, 65532, 2, 65533, 65532, 2, 65534, 65532, 2, 65535, 65532, 2, 65535, 65533, 2, 65535, 65534, 2, 65534, 65534, 2, 65533, 65534, 2, 65533, 65533, 2, 65534, 65533, 2, 0, 65532, 0, 0, 65533, 0, 0, 65534, 0, 1, 65534, 0, 3, 65534, 0, 3, 65533, 0, 2, 65533, 0, 1, 65533, 0, 2, 65534, 0, 2, 65532, 0, 1, 65532, 0, 3, 65532, 0, 65528, 0, 2, 65528, 1, 2, 65528, 2, 2, 65528, 3, 2, 65528, 4, 2, 65528, 5, 2, 65528, 6, 2, 65528, 7, 2, 65529, 0, 2, 65529, 1, 2, 65529, 2, 2, 65529, 3, 2, 65529, 4, 2, 65529, 5, 2, 65529, 6, 2, 65529, 7, 2, 65530, 0, 2, 65530, 1, 2, 65530, 2, 2, 65530, 3, 2, 65530, 4, 2, 65530, 5, 2, 65530, 6, 2, 65530, 7, 2, 65531, 0, 2, 65531, 1, 2, 65531, 2, 2, 65531, 3, 2, 65531, 4, 2, 65531, 5, 2, 65531, 6, 2, 65531, 7, 2, 65532, 4, 2, 65532, 5, 2, 65532, 6, 2, 65532, 7, 2, 65533, 4, 2, 65533, 5, 2, 65533, 6, 2, 65533, 7, 2, 65534, 4, 2, 65534, 5, 2, 65534, 6, 2, 65534, 7, 2, 65535, 4, 2, 65535, 5, 2, 65535, 6, 2, 65535, 7, 2, 0, 65528, 2, 0, 65529, 2, 0, 65530, 2, 0, 65531, 2, 1, 65528, 2, 1, 65529, 2, 1, 65530, 2, 1, 65531, 2, 2, 65528, 2, 2, 65529, 2, 2, 65530, 2, 2, 65531, 2, 3, 65528, 2, 3, 65529, 2, 3, 65530, 2, 3, 65531, 2, 4, 65528, 2, 4, 65529, 2, 4, 65530, 2, 4, 65531, 2, 5, 65528, 2, 5, 65529, 2, 5, 65530, 2, 5, 65531, 2, 6, 65528, 2, 6, 65529, 2, 6, 65530, 2, 6, 65531, 2, 7, 65528, 2, 7, 65529, 2, 7, 65530, 2, 7, 65531, 2, 4, 65532, 2, 4, 65533, 2, 4, 65534, 2, 4, 65535, 2, 5, 65532, 2, 5, 65533, 2, 5, 65534, 2, 5, 65535, 2, 6, 65532, 2, 6, 65533, 2, 6, 65534, 2, 6, 65535, 2, 7, 65532, 2, 7, 65533, 2, 7, 65534, 2, 7, 65535, 2, 4, 0, 0, 4, 1, 0, 4, 2, 0, 4, 3, 0, 4, 4, 0, 4, 5, 0, 4, 6, 0, 4, 7, 0, 5, 0, 0, 5, 1, 0, 5, 2, 0, 5, 3, 0, 5, 4, 0, 5, 5, 0, 5, 6, 0, 5, 7, 0, 6, 0, 0, 6, 1, 0, 6, 2, 0, 6, 3, 0, 6, 4, 0, 6, 5, 0, 6, 6, 0, 6, 7, 0, 7, 0, 0, 7, 1, 0, 7, 2, 0, 7, 3, 0, 7, 4, 0, 7, 5, 0, 7, 6, 0, 7, 7, 0, 0, 4, 0, 0, 5, 0, 0, 6, 0, 0, 7, 0, 1, 4, 0, 1, 5, 0, 1, 6, 0, 1, 7, 0, 2, 4, 0, 2, 5, 0, 2, 6, 0, 2, 7, 0, 3, 4, 0, 3, 5, 0, 3, 6, 0, 3, 7, 0, 65528, 65528, 0, 65528, 65529, 0, 65528, 65530, 0, 65528, 65531, 0, 65528, 65532, 0, 65528, 65533, 0, 65528, 65534, 0, 65528, 65535, 0, 65529, 65528, 0, 65529, 65529, 0, 65529, 65530, 0, 65529, 65531, 0, 65529, 65532, 0, 65529, 65533, 0, 65529, 65534, 0, 65529, 65535, 0, 65530, 65528, 0, 65530, 65529, 0, 65530, 65530, 0, 65530, 65531, 0, 65530, 65532, 0, 65530, 65533, 0, 65530, 65534, 0, 65530, 65535, 0, 65531, 65528, 0, 65531, 65529, 0, 65531, 65530, 0, 65531, 65531, 0, 65531, 65532, 0, 65531, 65533, 0, 65531, 65534, 0, 65531, 65535, 0, 65532, 65528, 0, 65532, 65529, 0, 65532, 65530, 0, 65532, 65531, 0, 65533, 65528, 0, 65533, 65529, 0, 65533, 65530, 0, 65533, 65531, 0, 65534, 65528, 0, 65534, 65529, 0, 65534, 65530, 0, 65534, 65531, 0, 65535, 65528, 0, 65535, 65529, 0, 65535, 65530, 0, 65535, 65531, 0)
+}
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 5)
+
+[node name="Player" parent="." instance=ExtResource("2_o6ksy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4283228, 0)

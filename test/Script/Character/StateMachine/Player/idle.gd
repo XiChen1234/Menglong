@@ -21,8 +21,5 @@ func enter() -> void:
 
 
 func update(_delta: float) -> void:
-	if character.control_component.get_attack_clicked():
-		state_machine.change_state("Attack")
-	
 	if character.control_component.get_is_moving():
 		state_machine.change_state("Run")

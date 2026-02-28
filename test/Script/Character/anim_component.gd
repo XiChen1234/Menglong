@@ -15,9 +15,7 @@ func play_trigger(anim_name: String) -> void:
 	spine_node_2d.play_animation(anim_name, false)
 
 
-
-
-## 反转
+## 左右反转
 ## - target: 反转的目标状态
 func reverse(target: bool) -> void:
 	spine_node_2d.reverse_animation(target)
