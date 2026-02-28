@@ -17,5 +17,6 @@ func exit() -> void:
 
 
 func _on_animation_finished(anim_name: String) -> void:
+	_anim_finished = true
 	if anim_name == "attack-combo1":
 		state_machine.change_state("Idle")
