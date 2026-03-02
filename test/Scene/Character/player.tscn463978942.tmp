@@ -1,0 +1,42 @@
+[gd_scene load_steps=9 format=3 uid="uid://cnbp6cul124j0"]
+
+[ext_resource type="PackedScene" uid="uid://dtbhawbfjoqjq" path="res://Scene/Character/character.tscn" id="1_5trst"]
+[ext_resource type="Script" uid="uid://bll1ubsthjhie" path="res://Scene/Character/player.gd" id="2_0ov3f"]
+[ext_resource type="SpineSkeletonDataResource" uid="uid://bjetm36xytvps" path="res://Resource/player-main.tres" id="3_2jyx5"]
+[ext_resource type="Script" uid="uid://1e01oufwne1g" path="res://Script/Character/StateMachine/Player/idle.gd" id="3_g5did"]
+[ext_resource type="Script" uid="uid://dfsaakm37d54h" path="res://Script/Character/StateMachine/Player/run.gd" id="4_g5did"]
+[ext_resource type="Script" uid="uid://c53xbtw0008cn" path="res://Scene/Character/input_controller.gd" id="6_0ov3f"]
+[ext_resource type="Script" uid="uid://gwvgvee8k6jd" path="res://Script/Character/StateMachine/Player/attack.gd" id="6_2jyx5"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_087al"]
+viewport_path = NodePath("SubViewport")
+
+[node name="Player" instance=ExtResource("1_5trst")]
+script = ExtResource("2_0ov3f")
+
+[node name="Sprite3D" parent="." index="1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.445, 0)
+texture = SubResource("ViewportTexture_087al")
+
+[node name="SpineNode2D" parent="SubViewport" index="0"]
+spine_res = ExtResource("3_2jyx5")
+preview_skin = "Goat"
+description = "玩家的Spine播放封装"
+
+[node name="ControlComponent" parent="." index="3"]
+script = ExtResource("6_0ov3f")
+
+[node name="StateMachine" parent="." index="4"]
+init_state = NodePath("Idle")
+
+[node name="Idle" type="Node" parent="StateMachine" index="0"]
+script = ExtResource("3_g5did")
+metadata/_custom_type_script = "uid://fk0n85bvuoc"
+
+[node name="Run" type="Node" parent="StateMachine" index="1"]
+script = ExtResource("4_g5did")
+metadata/_custom_type_script = "uid://fk0n85bvuoc"
+
+[node name="Attack" type="Node" parent="StateMachine" index="2"]
+script = ExtResource("6_2jyx5")
+metadata/_custom_type_script = "uid://fk0n85bvuoc"

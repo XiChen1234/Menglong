@@ -39,8 +39,6 @@ func _ready() -> void:
 	skeleton.set_skin_by_name(preview_skin)
 	
 	anim_state = spine_sprite.get_animation_state()
-	#current_animation_name = preview_anim
-	#anim_state.set_animation(preview_anim)
 	
 	var window_size: Vector2 = get_viewport().size
 	spine_sprite.position = Vector2(window_size.x / 2, window_size.y - 300)
@@ -81,5 +79,5 @@ func _on_spine_sprite_animation_completed(
 		return
 	
 	var anim_name: String = track_entry.get_animation().get_name()
-	print(anim_name)
+	#print(anim_name)
 	self.emit_signal("animation_finished", anim_name)

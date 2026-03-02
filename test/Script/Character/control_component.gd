@@ -13,7 +13,6 @@ var _move_input: Vector2 = Vector2.ZERO
 var _attack_clicked: bool = false
 
 
-
 ## 输入决策，子类需要继承重写，实现具体的输入决策
 func control() -> void:
 	pass

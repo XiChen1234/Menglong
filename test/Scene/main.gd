@@ -1,6 +1,6 @@
 extends Node3D
 
-@onready var player: Character = $Player
+@onready var player: Player = $Player
 @onready var camera_3d: Camera3D = $Camera3D
 
 var offset: Vector3 = Vector3(0, 2, 5)
