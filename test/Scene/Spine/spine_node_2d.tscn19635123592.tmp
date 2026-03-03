@@ -1,30 +1,33 @@
-@tool
+[gd_scene load_steps=2 format=3 uid="uid://co7cninpw3g85"]
+
+[sub_resource type="GDScript" id="GDScript_31gdg"]
+script/source = "@tool
 extends Node2D
 class_name SpineNode2D
-"""
+\"\"\"
 用于显示Spine的场景组件
-"""
+\"\"\"
 
 signal animation_finished(anim_name: String)
 
 ## 预设属性
 @export var spine_res: SpineSkeletonDataResource
-@export var preview_skin: String = "default"
-@export var preview_anim: String = "idle"
-@export_multiline var description: String = ""
+@export var preview_skin: String = \"default\"
+@export var preview_anim: String = \"idle\"
+@export_multiline var description: String = \"\"
 
 @onready var spine_sprite: SpineSprite = $SpineSprite
 @onready var label: Label = $Label
 
 var skeleton: SpineSkeleton
 var anim_state: SpineAnimationState
-var current_animation_name: String = ""
+var current_animation_name: String = \"\"
 
 
 func _ready() -> void:
 	if not spine_res:
-		label.text = "SpineNode2D: spine_res 未设置"
-		push_warning("SpineNode2D: spine_res 未设置")
+		label.text = \"SpineNode2D: spine_res 未设置\"
+		push_warning(\"SpineNode2D: spine_res 未设置\")
 		return
 	
 	spine_sprite.skeleton_data_res = spine_res
@@ -79,4 +82,19 @@ func _on_spine_sprite_animation_completed(
 		return
 	
 	var anim_name: String = track_entry.get_animation().get_name()
-	self.emit_signal("animation_finished", anim_name)
+	#print(anim_name)
+	self.emit_signal(\"animation_finished\", anim_name)
+"
+
+[node name="SpineNode2D" type="Node2D"]
+script = SubResource("GDScript_31gdg")
+
+[node name="SpineSprite" type="SpineSprite" parent="."]
+position = Vector2(1, -298)
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "SpineNode2D: spine_res 未设置"
+
+[connection signal="animation_completed" from="SpineSprite" to="." method="_on_spine_sprite_animation_completed"]
