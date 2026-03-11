@@ -17,9 +17,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.445, 0)
 texture = SubResource("ViewportTexture_087al")
 
 [node name="SpineNode2D" parent="SubViewport" index="0"]
+spine_res = ExtResource("3_2jyx5")
 preview_skin = "Goat"
 description = "玩家的Spine播放封装"
-spine_res = ExtResource("3_2jyx5")
 
 [node name="ComboTimer" type="Timer" parent="." index="3"]
 one_shot = true
